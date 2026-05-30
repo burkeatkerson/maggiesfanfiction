@@ -1,0 +1,232 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* Dark mode follows the prototype's data-theme switch (not the OS). */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* ============================================================
+   Design tokens — ported from the prototype styles.css.
+   Light values on :root, dark overrides on [data-theme="dark"].
+   ============================================================ */
+:root {
+  /* Backgrounds */
+  --bg-body: #ffffff;
+  --bg-block: #f9f7f3;
+  --bg-tag: #f9f7f3;
+
+  /* Ink */
+  --ink: #1a1a1a;
+  --ink-soft: #333333;
+  --ink-muted: #888888;
+  --ink-faint: #999999;
+
+  /* Warm neutrals / accents */
+  --taupe: #8b7355;
+  --tan: #c0a080;
+  --beige: #d4c5b9;
+  --beige-2: #ede8e0;
+  --beige-3: #ddd2c6;
+
+  /* Lines */
+  --line: #e8e8e8;
+  --line-soft: #efece6;
+
+  /* Type — runtime-swappable font roles (source of truth). */
+  --ff-display: "EB Garamond", Georgia, serif;
+  --ff-body: "Crimson Text", Georgia, serif;
+  --ff-meta: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  /* Rhythm */
+  --block-pad-y: 84px;
+  --block-pad-x: 60px;
+  --col: 720px;
+}
+
+[data-theme="dark"] {
+  --bg-body: #141210;
+  --bg-block: #1c1a17;
+  --bg-tag: #221f1b;
+
+  --ink: #f2ede5;
+  --ink-soft: #ccc5ba;
+  --ink-muted: #a39a8c;
+  --ink-faint: #847c70;
+
+  --taupe: #c2a883;
+  --tan: #c0a080;
+  --beige: #4a4339;
+  --beige-2: #3a342c;
+  --beige-3: #2c2722;
+
+  --line: #322e29;
+  --line-soft: #2a2621;
+}
+
+/* ============================================================
+   Map tokens into Tailwind's theme so utilities like text-ink,
+   bg-block, border-line, font-display respond to the theme.
+   Color token names differ from the source vars (no recursion);
+   font tokens read the --ff-* source vars.
+   ============================================================ */
+@theme inline {
+  --color-canvas: var(--bg-body);
+  --color-block: var(--bg-block);
+  --color-tag: var(--bg-tag);
+
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-faint: var(--ink-faint);
+
+  --color-taupe: var(--taupe);
+  --color-tan: var(--tan);
+  --color-beige: var(--beige);
+  --color-beige-2: var(--beige-2);
+  --color-beige-3: var(--beige-3);
+
+  --color-line: var(--line);
+  --color-line-soft: var(--line-soft);
+
+  --font-display: var(--ff-display);
+  --font-body: var(--ff-body);
+  --font-meta: var(--ff-meta);
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg-body);
+  color: var(--ink-soft);
+  font-family: var(--ff-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::selection {
+  background: rgba(139, 115, 85, 0.18);
+}
+
+.block,
+section {
+  transition: background-color 0.4s ease, border-color 0.4s ease;
+}
+
+/* ============================================================
+   Reusable scaffolding / type helpers (ported from styles.css)
+   ============================================================ */
+.block {
+  padding: var(--block-pad-y) var(--block-pad-x);
+}
+.block-inner {
+  max-width: var(--col);
+  margin: 0 auto;
+}
+.block-wide {
+  max-width: 940px;
+  margin: 0 auto;
+}
+
+.kicker {
+  font-family: var(--ff-meta);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--taupe);
+  margin: 0;
+}
+
+.meta {
+  font-family: var(--ff-meta);
+  font-size: 13px;
+  color: var(--ink-muted);
+  letter-spacing: 0.01em;
+}
+
+/* Very faint 45deg texture — barely perceptible */
+.texture {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(139, 115, 85, 0.018) 0px,
+    rgba(139, 115, 85, 0.018) 1px,
+    transparent 1px,
+    transparent 7px
+  );
+}
+
+/* Optional drop cap for article bodies */
+.has-dropcap > p:first-of-type::first-letter {
+  float: left;
+  font-family: var(--ff-display);
+  font-size: 3.6em;
+  line-height: 0.8;
+  padding: 0.06em 0.08em 0 0;
+  color: var(--ink);
+}
+
+/* TipTap / prose: headings always keep the site display face */
+.rich-editor :is(h1, h2, h3),
+.prose-article :is(h1, h2, h3) {
+  font-family: var(--ff-display);
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.rich-editor blockquote,
+.prose-article blockquote {
+  font-style: italic;
+  border-left: 2px solid var(--taupe);
+  margin: 0.6em 0;
+  padding: 0.1em 0 0.1em 18px;
+  color: var(--ink-soft);
+}
+.rich-editor :is(h1, h2, h3),
+.prose-article :is(h1, h2, h3) {
+  font-size: 1.5em;
+  font-weight: 500;
+  margin: 0.7em 0 0.3em;
+}
+.rich-editor p,
+.prose-article p {
+  margin: 0 0 0.95em;
+}
+.rich-editor ul,
+.prose-article ul {
+  margin: 0 0 0.95em;
+  padding-left: 1.3em;
+  list-style: disc;
+}
+/* TipTap placeholder for an empty document */
+.rich-editor p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: var(--ink-faint);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Content swap / reveal fallback (Framer Motion handles most) */
+@media (prefers-reduced-motion: reduce) {
+  html,
+  body,
+  .block,
+  section {
+    transition: none !important;
+  }
+}
+
+/* Responsive rhythm */
+@media (max-width: 760px) {
+  :root {
+    --block-pad-y: 52px;
+    --block-pad-x: 24px;
+  }
+}
