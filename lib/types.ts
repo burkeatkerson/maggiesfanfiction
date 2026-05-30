@@ -78,6 +78,12 @@ export interface Post {
   updated_at: string;
 }
 
+/** A post with its category + series resolved (via embedded select). */
+export interface PostView extends Post {
+  category: { name: string; slug: string | null } | null;
+  series: { title: string; slug: string | null } | null;
+}
+
 /** Storage buckets that uploads may target. */
 export const UPLOAD_BUCKETS = ["post-images", "avatars"] as const;
 export type UploadBucket = (typeof UPLOAD_BUCKETS)[number];

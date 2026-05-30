@@ -1,6 +1,5 @@
 import Link from "next/link";
-import type { Post } from "@/lib/types";
-import type { MockSeries } from "@/lib/mock";
+import type { PostView } from "@/lib/types";
 
 /** Block 1 — series context strip (ported from blocks.jsx). */
 export function SeriesContext({
@@ -8,8 +7,8 @@ export function SeriesContext({
   parts,
   currentSlug,
 }: {
-  series: MockSeries;
-  parts: Post[];
+  series: { title: string };
+  parts: PostView[];
   currentSlug: string;
 }) {
   return (

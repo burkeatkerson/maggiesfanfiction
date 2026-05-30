@@ -1,6 +1,5 @@
 import Link from "next/link";
-import type { Post } from "@/lib/types";
-import { categoryName, getSeriesById } from "@/lib/mock";
+import type { PostView } from "@/lib/types";
 
 function fmtDate(iso: string | null) {
   if (!iso) return "";
@@ -8,8 +7,8 @@ function fmtDate(iso: string | null) {
 }
 
 /** A single story row in the /blog index. */
-export function PostCard({ post }: { post: Post }) {
-  const series = getSeriesById(post.series_id);
+export function PostCard({ post }: { post: PostView }) {
+  const series = post.series;
   return (
     <Link
       href={`/blog/${post.slug}`}
@@ -23,7 +22,7 @@ export function PostCard({ post }: { post: Post }) {
           {post.excerpt}
         </span>
         <span className="meta mt-3.5 flex flex-wrap items-center gap-2.5 text-[12.5px]">
-          <span className="tracking-[0.04em] text-taupe">{categoryName(post.category_id)}</span>
+          <span className="tracking-[0.04em] text-taupe">{post.category?.name}</span>
           {series ? (
             <>
               <span className="text-line">·</span>

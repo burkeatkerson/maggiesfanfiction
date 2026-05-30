@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
 
   const params: ListPostsParams = {
-    limit: clampInt(searchParams.get("limit"), 50, 1, 100),
+    limit: clampInt(searchParams.get("limit"), 50, 1, 500),
     offset: clampInt(searchParams.get("offset"), 0, 0, 100000),
   };
 

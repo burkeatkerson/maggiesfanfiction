@@ -1,7 +1,7 @@
 import Link from "next/link";
-import type { SeriesWithParts } from "@/lib/types";
+import type { SeriesView } from "@/lib/data";
 
-type Row = SeriesWithParts & { fandom: string | null; href: string | null };
+type Row = SeriesView;
 
 function SeriesRow({ s }: { s: Row }) {
   const clickable = !!s.href;

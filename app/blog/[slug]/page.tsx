@@ -7,19 +7,13 @@ import { AuthorSeries } from "@/components/reader/AuthorSeries";
 import { JsonLd } from "@/components/seo/JsonLd";
 import {
   getPostBySlug,
-  getSeriesById,
   getPostsInSeries,
-  getPublishedSlugs,
   listPublishedPosts,
   getAuthor,
   getSiteSettings,
-} from "@/lib/mock";
+} from "@/lib/data";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-
-export function generateStaticParams() {
-  return getPublishedSlugs().map((slug) => ({ slug }));
-}
 
 export async function generateMetadata({
   params,
@@ -27,7 +21,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const post = await getPostBySlug(slug);
   if (!post) return { title: "Not found" };
   const description = post.seo_description || post.excerpt || undefined;
   return {
@@ -46,14 +40,15 @@ export async function generateMetadata({
 
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const post = await getPostBySlug(slug);
   if (!post || post.status !== "published") notFound();
 
-  const site = getSiteSettings();
-  const author = getAuthor();
-  const series = getSeriesById(post.series_id);
-  const parts = series ? getPostsInSeries(series.id) : [];
-  const storyCount = listPublishedPosts().length;
+  const [site, author, parts, published] = await Promise.all([
+    getSiteSettings(),
+    getAuthor(),
+    post.series_id ? getPostsInSeries(post.series_id) : Promise.resolve([]),
+    listPublishedPosts(),
+  ]);
 
   return (
     <main>
@@ -80,19 +75,19 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         </div>
       </div>
 
-      {series && parts.length ? (
-        <SeriesContext series={series} parts={parts} currentSlug={post.slug} />
+      {post.series && parts.length ? (
+        <SeriesContext series={post.series} parts={parts} currentSlug={post.slug} />
       ) : null}
 
       <Article post={post} authorName={author.name} />
 
       <AuthorSeries
-        series={series}
+        series={post.series}
         parts={parts}
         currentSlug={post.slug}
         authorName={author.name}
-        authorBio={site.bio ?? ""}
-        storyCount={storyCount}
+        authorBio={site?.bio ?? ""}
+        storyCount={published.length}
       />
     </main>
   );

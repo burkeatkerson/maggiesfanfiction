@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { SolidButton } from "@/components/ui/form";
 import { ThemeToggleLink } from "@/components/theme/ThemeToggle";
+import { api } from "./api";
 
 function NavItem({ href, kicker, label, active }: { href: string; kicker: string; label: string; active: boolean }) {
   return (
@@ -25,8 +26,19 @@ function NavItem({ href, kicker, label, active }: { href: string; kicker: string
 /** Admin left rail (ported from admin-shell.jsx). */
 export function AdminRail() {
   const pathname = usePathname();
+  const router = useRouter();
   const onPosts = pathname === "/admin" || pathname.startsWith("/admin/create") || pathname.startsWith("/admin/edit");
   const onSite = pathname.startsWith("/admin/site");
+
+  async function signOut() {
+    try {
+      await api.auth.logout();
+    } catch {
+      /* ignore — clear client state regardless */
+    }
+    router.push("/admin/login");
+    router.refresh();
+  }
 
   return (
     <aside className="texture flex flex-col self-start overflow-y-auto border-b border-line-soft bg-block px-9 py-12 md:sticky md:top-0 md:h-screen md:border-b-0 md:border-r">
@@ -51,9 +63,13 @@ export function AdminRail() {
           View site →
         </Link>
         <ThemeToggleLink className="py-1.5 text-left font-meta text-[12.5px] text-ink-muted transition-colors hover:text-taupe" />
-        <Link href="/admin/login" className="py-1.5 font-meta text-[12.5px] text-ink-muted no-underline transition-colors hover:text-taupe">
+        <button
+          type="button"
+          onClick={signOut}
+          className="py-1.5 text-left font-meta text-[12.5px] text-ink-muted transition-colors hover:text-taupe"
+        >
           Sign out
-        </Link>
+        </button>
       </div>
     </aside>
   );

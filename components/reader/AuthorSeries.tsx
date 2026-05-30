@@ -1,8 +1,7 @@
 import Link from "next/link";
-import type { Post } from "@/lib/types";
-import type { MockSeries } from "@/lib/mock";
+import type { PostView } from "@/lib/types";
 
-function SeriesNavSidebar({ parts, currentSlug }: { parts: Post[]; currentSlug: string }) {
+function SeriesNavSidebar({ parts, currentSlug }: { parts: PostView[]; currentSlug: string }) {
   return (
     <nav aria-label="Series navigation">
       <p className="kicker mb-[18px]">The Series</p>
@@ -75,8 +74,8 @@ export function AuthorSeries({
   authorBio,
   storyCount,
 }: {
-  series: MockSeries | null;
-  parts: Post[];
+  series: { title: string } | null;
+  parts: PostView[];
   currentSlug: string;
   authorName: string;
   authorBio: string;

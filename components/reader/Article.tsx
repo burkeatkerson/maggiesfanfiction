@@ -1,4 +1,4 @@
-import type { Post } from "@/lib/types";
+import type { PostView } from "@/lib/types";
 import { Avatar, ImagePlaceholder, Tag } from "@/components/ui/primitives";
 import { bodyCss } from "@/lib/fonts";
 
@@ -13,7 +13,7 @@ export function Article({
   authorName,
   dropcap = true,
 }: {
-  post: Post;
+  post: PostView;
   authorName: string;
   dropcap?: boolean;
 }) {

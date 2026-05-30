@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { MockCategory } from "@/lib/mock";
+import type { CategoryCount } from "@/lib/data";
 
 /** Block 1 — the hero *is* the navigation (ported from homepage.jsx). */
 export function HeroNav({
@@ -7,7 +7,7 @@ export function HeroNav({
   intro,
   statement,
 }: {
-  forms: MockCategory[];
+  forms: CategoryCount[];
   intro: string;
   statement: string;
 }) {

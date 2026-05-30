@@ -1,6 +1,5 @@
 import Link from "next/link";
-import type { Post } from "@/lib/types";
-import { categoryName } from "@/lib/mock";
+import type { PostView } from "@/lib/types";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 function fmtDate(iso: string | null) {
@@ -13,7 +12,7 @@ export function LatestFooter({
   latest,
   authorName,
 }: {
-  latest: Post[];
+  latest: PostView[];
   authorName: string;
 }) {
   return (
@@ -34,7 +33,7 @@ export function LatestFooter({
                       {p.title}
                     </span>
                     <span className="meta whitespace-nowrap text-right text-[12px]">
-                      <span className="tracking-[0.04em] text-taupe">{categoryName(p.category_id)}</span>
+                      <span className="tracking-[0.04em] text-taupe">{p.category?.name}</span>
                       <span className="mx-[7px] text-line">·</span>
                       <span>{fmtDate(p.published_at)}</span>
                     </span>

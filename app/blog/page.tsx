@@ -3,7 +3,7 @@ import Link from "next/link";
 import { PostCard } from "@/components/blog/PostCard";
 import { CategoryFilter } from "@/components/blog/CategoryFilter";
 import { Reveal } from "@/components/ui/Reveal";
-import { getCategories, listPublishedPosts, getSiteSettings } from "@/lib/mock";
+import { getCategoriesWithCounts, listPublishedPosts, getSiteSettings } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "All Writing",
@@ -16,20 +16,20 @@ export default async function BlogIndex({
   searchParams: Promise<{ category?: string }>;
 }) {
   const { category } = await searchParams;
-  const site = getSiteSettings();
-  const categories = getCategories();
+  const [site, categories, all] = await Promise.all([
+    getSiteSettings(),
+    getCategoriesWithCounts(),
+    listPublishedPosts(),
+  ]);
   const activeCat = categories.find((c) => c.slug === category);
-
-  const posts = listPublishedPosts().filter((p) =>
-    activeCat ? p.category_id === activeCat.id : true,
-  );
+  const posts = all.filter((p) => (activeCat ? p.category_id === activeCat.id : true));
 
   return (
     <main>
       <section className="block texture border-b border-line-soft bg-block">
         <div className="block-wide">
           <Link href="/" className="meta no-underline hover:text-taupe">
-            ← {site.site_title}
+            ← {site?.site_title ?? "Maggie's Fan Fiction"}
           </Link>
           <p className="kicker mt-8">All Writing</p>
           <h1 className="mt-3.5 max-w-[640px] font-display text-[clamp(30px,4.4vw,46px)] font-medium leading-[1.12] tracking-[-0.015em] text-ink text-balance">
