@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { PostView } from "@/lib/types";
+import { Reveal } from "@/components/ui/motion";
 
 function SeriesNavSidebar({ parts, currentSlug }: { parts: PostView[]; currentSlug: string }) {
   return (
@@ -83,14 +84,14 @@ export function AuthorSeries({
 }) {
   return (
     <section className="block texture border-t border-line-soft bg-block">
-      <div className="block-wide grid grid-cols-1 gap-12 md:grid-cols-[260px_1fr]">
+      <Reveal className="block-wide grid grid-cols-1 gap-12 md:grid-cols-[260px_1fr]">
         {series && parts.length ? (
           <SeriesNavSidebar parts={parts} currentSlug={currentSlug} />
         ) : (
           <div />
         )}
         <AboutAuthor name={authorName} bio={authorBio} storyCount={storyCount} />
-      </div>
+      </Reveal>
     </section>
   );
 }

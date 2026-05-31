@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { SeriesView } from "@/lib/data";
+import { Reveal, Stagger, StaggerItem } from "@/components/ui/motion";
 
 type Row = SeriesView;
 
@@ -48,22 +49,26 @@ export function FeaturedSeries({ series }: { series: Row[] }) {
   return (
     <section className="block bg-canvas">
       <div className="block-wide">
-        <div className="flex flex-wrap items-baseline justify-between gap-6">
-          <div>
-            <p className="kicker">Featured Series</p>
-            <h2 className="mt-3.5 max-w-[560px] font-display text-[clamp(28px,3.6vw,38px)] font-medium leading-[1.16] tracking-[-0.015em] text-ink text-balance">
-              Stories set in worlds you already love
-            </h2>
+        <Reveal>
+          <div className="flex flex-wrap items-baseline justify-between gap-6">
+            <div>
+              <p className="kicker">Featured Series</p>
+              <h2 className="mt-3.5 max-w-[560px] font-display text-[clamp(28px,3.6vw,38px)] font-medium leading-[1.16] tracking-[-0.015em] text-ink text-balance">
+                Stories set in worlds you already love
+              </h2>
+            </div>
+            <span className="meta text-[13px]">{series.length} universes</span>
           </div>
-          <span className="meta text-[13px]">{series.length} universes</span>
-        </div>
+        </Reveal>
 
-        <div className="mt-11">
-          {series.map((s) => (
-            <SeriesRow key={s.id} s={s} />
+        <Stagger className="mt-11">
+          {series.map((s, i) => (
+            <StaggerItem key={s.id} index={i}>
+              <SeriesRow s={s} />
+            </StaggerItem>
           ))}
           <div className="border-t border-line" />
-        </div>
+        </Stagger>
       </div>
     </section>
   );

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { PostView } from "@/lib/types";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { Reveal } from "@/components/ui/motion";
 
 function fmtDate(iso: string | null) {
   if (!iso) return "";
@@ -18,7 +19,7 @@ export function LatestFooter({
   return (
     <section className="block texture border-t border-line-soft bg-block">
       <div className="block-wide">
-        <div className="grid grid-cols-1 gap-16 md:grid-cols-[1.4fr_1fr]">
+        <Reveal className="grid grid-cols-1 gap-16 md:grid-cols-[1.4fr_1fr]">
           {/* latest list */}
           <div>
             <p className="kicker mb-[22px]">Lately</p>
@@ -55,7 +56,7 @@ export function LatestFooter({
               quiet, devoted few.
             </p>
           </aside>
-        </div>
+        </Reveal>
 
         <div className="mt-16 flex flex-col items-center gap-9">
           <Link

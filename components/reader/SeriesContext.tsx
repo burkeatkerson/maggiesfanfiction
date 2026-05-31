@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { PostView } from "@/lib/types";
+import { Reveal } from "@/components/ui/motion";
 
 /** Block 1 — series context strip (ported from blocks.jsx). */
 export function SeriesContext({
@@ -13,7 +14,7 @@ export function SeriesContext({
 }) {
   return (
     <section className="block texture border-b border-line-soft bg-block">
-      <div className="block-inner">
+      <Reveal className="block-inner">
         <p className="kicker">Part of a Series</p>
         <h2 className="my-4 mb-[22px] font-display text-[clamp(28px,4vw,34px)] font-medium leading-[1.15] tracking-[-0.01em] text-ink">
           {series.title}
@@ -38,7 +39,7 @@ export function SeriesContext({
             );
           })}
         </p>
-      </div>
+      </Reveal>
     </section>
   );
 }

@@ -1,6 +1,7 @@
 import type { PostView } from "@/lib/types";
 import { Avatar, ImagePlaceholder, Tag } from "@/components/ui/primitives";
 import { bodyCss } from "@/lib/fonts";
+import { Reveal } from "@/components/ui/motion";
 
 function fmtDate(iso: string | null) {
   if (!iso) return "";
@@ -19,7 +20,7 @@ export function Article({
 }) {
   return (
     <section className="block bg-canvas">
-      <article className="block-inner">
+      <Reveal as="article" className="block-inner">
         <header>
           <h1 className="m-0 mb-[26px] font-display text-[clamp(34px,5.2vw,44px)] font-medium leading-[1.16] tracking-[-0.015em] text-ink text-balance">
             {post.headline || post.title}
@@ -58,7 +59,7 @@ export function Article({
             {fmtDate(post.published_at)} · {post.reading_time} min read
           </span>
         </div>
-      </article>
+      </Reveal>
     </section>
   );
 }

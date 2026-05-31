@@ -1,7 +1,6 @@
 import { HeroNav } from "@/components/home/HeroNav";
 import { FeaturedSeries } from "@/components/home/FeaturedSeries";
 import { LatestFooter } from "@/components/home/LatestFooter";
-import { Reveal } from "@/components/ui/Reveal";
 import { JsonLd } from "@/components/seo/JsonLd";
 import {
   getSiteSettings,
@@ -35,12 +34,9 @@ export default async function Home() {
         }}
       />
       <HeroNav forms={forms} intro={site?.intro ?? ""} statement={site?.statement ?? ""} />
-      <Reveal>
-        <FeaturedSeries series={series} />
-      </Reveal>
-      <Reveal>
-        <LatestFooter latest={latest} authorName={author.name} />
-      </Reveal>
+      <FeaturedSeries series={series} />
+      <LatestFooter latest={latest} authorName={author.name} />
+
     </main>
   );
 }
