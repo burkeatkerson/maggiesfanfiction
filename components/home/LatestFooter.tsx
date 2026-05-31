@@ -12,9 +12,11 @@ function fmtDate(iso: string | null) {
 export function LatestFooter({
   latest,
   authorName,
+  authorAvatar,
 }: {
   latest: PostView[];
   authorName: string;
+  authorAvatar: string | null;
 }) {
   return (
     <section className="block-pad texture border-t border-line-soft bg-block">
@@ -48,6 +50,14 @@ export function LatestFooter({
           {/* signature */}
           <aside>
             <p className="kicker mb-5">The Writer</p>
+            {authorAvatar ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={authorAvatar}
+                alt={authorName}
+                className="mb-6 h-20 w-20 rounded-full border border-line object-cover"
+              />
+            ) : null}
             <p className="mb-[22px] font-display text-[22px] font-normal italic leading-[1.4] text-ink">
               &ldquo;I write the parts the canon left out.&rdquo;
             </p>

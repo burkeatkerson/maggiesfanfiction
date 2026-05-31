@@ -35,7 +35,7 @@ export default async function Home() {
       />
       <HeroNav forms={forms} intro={site?.intro ?? ""} statement={site?.statement ?? ""} />
       <FeaturedSeries series={series} />
-      <LatestFooter latest={latest} authorName={author.name} />
+      <LatestFooter latest={latest} authorName={author.name} authorAvatar={author.avatar_url} />
 
     </main>
   );

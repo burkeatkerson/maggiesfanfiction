@@ -87,6 +87,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         currentSlug={post.slug}
         authorName={author.name}
         authorBio={site?.bio ?? ""}
+        authorAvatar={author.avatar_url}
         storyCount={published.length}
       />
     </main>

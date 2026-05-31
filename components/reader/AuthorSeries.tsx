@@ -38,21 +38,40 @@ function SeriesNavSidebar({ parts, currentSlug }: { parts: PostView[]; currentSl
   );
 }
 
-function AboutAuthor({ name, bio, storyCount }: { name: string; bio: string; storyCount: number }) {
+function AboutAuthor({
+  name,
+  bio,
+  storyCount,
+  avatarUrl,
+}: {
+  name: string;
+  bio: string;
+  storyCount: number;
+  avatarUrl: string | null;
+}) {
   return (
     <div>
       <h3 className="m-0 mb-[22px] font-display text-[22px] font-medium tracking-[-0.01em] text-ink">
         About the Author
       </h3>
       <div className="flex flex-wrap items-start gap-7">
-        <div
-          className="texture grid h-40 w-[200px] shrink-0 place-items-center border border-line"
-          style={{ background: "linear-gradient(135deg, #e4d8cb 0%, var(--beige) 60%, #c7b6a6 100%)" }}
-        >
-          <span className="font-meta text-[10.5px] font-semibold uppercase tracking-[0.2em]" style={{ color: "#8a7763" }}>
-            {name}
-          </span>
-        </div>
+        {avatarUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={avatarUrl}
+            alt={name}
+            className="h-40 w-[200px] shrink-0 border border-line object-cover"
+          />
+        ) : (
+          <div
+            className="texture grid h-40 w-[200px] shrink-0 place-items-center border border-line"
+            style={{ background: "linear-gradient(135deg, #e4d8cb 0%, var(--beige) 60%, #c7b6a6 100%)" }}
+          >
+            <span className="font-meta text-[10.5px] font-semibold uppercase tracking-[0.2em]" style={{ color: "#8a7763" }}>
+              {name}
+            </span>
+          </div>
+        )}
         <div className="min-w-[260px] flex-1 basis-[280px]">
           <p className="mb-[22px] font-body text-[16px] leading-[1.72]" style={{ color: "var(--ink-muted)" }}>
             {bio}
@@ -73,6 +92,7 @@ export function AuthorSeries({
   currentSlug,
   authorName,
   authorBio,
+  authorAvatar,
   storyCount,
 }: {
   series: { title: string } | null;
@@ -80,6 +100,7 @@ export function AuthorSeries({
   currentSlug: string;
   authorName: string;
   authorBio: string;
+  authorAvatar: string | null;
   storyCount: number;
 }) {
   return (
@@ -90,7 +111,7 @@ export function AuthorSeries({
         ) : (
           <div />
         )}
-        <AboutAuthor name={authorName} bio={authorBio} storyCount={storyCount} />
+        <AboutAuthor name={authorName} bio={authorBio} storyCount={storyCount} avatarUrl={authorAvatar} />
       </Reveal>
     </section>
   );
