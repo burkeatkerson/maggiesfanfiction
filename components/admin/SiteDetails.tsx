@@ -95,6 +95,22 @@ export function SiteDetails() {
     }
   }
 
+  // Author photo saves immediately on upload/remove (no "Save changes" needed),
+  // so it can't be lost by navigating away. Persists only photo_url, leaving any
+  // other unsaved identity edits untouched.
+  async function savePhoto(url: string | null) {
+    const prev = site?.photo_url ?? null;
+    setField("photo_url", url); // optimistic — updates the preview
+    try {
+      const updated = await api.site.update({ photo_url: url });
+      setSite(updated);
+      flash(url ? "Author photo saved" : "Author photo removed");
+    } catch (e) {
+      setField("photo_url", prev); // revert on failure
+      flash(e instanceof Error ? e.message : "Photo save failed");
+    }
+  }
+
   // ---- categories ----
   async function addCategory() {
     try {
@@ -153,10 +169,10 @@ export function SiteDetails() {
         <TextInput value={draft.site_title ?? ""} onChange={(v) => setField("site_title", v)} />
       </FieldGroup>
 
-      <FieldGroup label="Author photo" note="Shown on the About panel. Uploaded to Supabase Storage.">
+      <FieldGroup label="Author photo" note="Shown on the homepage footer & story About panels. Saves automatically when you upload.">
         <ImageUploader
           value={draft.photo_url}
-          onChange={(v) => setField("photo_url", v)}
+          onChange={(v) => savePhoto(v)}
           bucket="avatars"
           shape="circle"
           label="Author photo"
