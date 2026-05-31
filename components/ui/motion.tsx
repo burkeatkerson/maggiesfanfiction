@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, useInView, useReducedMotion } from "framer-motion";
-import { createElement, useRef, type ReactNode } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { createElement, type ReactNode } from "react";
 
 /**
  * Motion vocabulary for the PUBLIC site — elegant, layered, consistent.
@@ -68,16 +68,13 @@ export function RevealText({
   stagger?: number;
 }) {
   const reduce = useReducedMotion();
-  // Observe the (unclipped) heading container — observing the masked words
-  // themselves would never fire, since they start clipped out of view.
-  const ref = useRef<HTMLElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
-
   if (reduce || !text) return createElement(as, { className }, text);
   const words = text.split(" ");
+  // Animate on mount (not on intersection): a masked word can't reliably
+  // trigger its own whileInView, and headlines must always become visible.
   return createElement(
     as,
-    { className, ref, "aria-label": text },
+    { className, "aria-label": text },
     words.map((word, i) => (
       <span
         key={i}
@@ -88,7 +85,7 @@ export function RevealText({
         <motion.span
           className="inline-block will-change-transform"
           initial={{ y: "115%" }}
-          animate={inView ? { y: 0 } : { y: "115%" }}
+          animate={{ y: 0 }}
           transition={{ duration: 0.85, delay: delay + i * stagger, ease: EASE }}
         >
           {word}
