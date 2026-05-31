@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { CategoryCount } from "@/lib/data";
-import { Reveal, Stagger, StaggerItem } from "@/components/ui/motion";
+import { Reveal, RevealText, Stagger, StaggerItem } from "@/components/ui/motion";
 
 /** Block 1 — the hero *is* the navigation (ported from homepage.jsx). */
 export function HeroNav({
@@ -17,10 +17,14 @@ export function HeroNav({
       <div className="block-wide">
         <Reveal>
           <p className="kicker">{intro}</p>
-          <p className="mt-[18px] max-w-[760px] font-display text-[clamp(24px,3.4vw,33px)] font-normal leading-[1.32] tracking-[-0.01em] text-ink text-balance">
-            {statement}
-          </p>
-
+        </Reveal>
+        <RevealText
+          as="p"
+          text={statement}
+          delay={0.12}
+          className="mt-[18px] max-w-[760px] font-display text-[clamp(24px,3.4vw,33px)] font-normal leading-[1.32] tracking-[-0.01em] text-ink"
+        />
+        <Reveal delay={0.2}>
           <div className="mt-14 flex items-baseline gap-3.5">
             <span className="kicker">Explore by form</span>
             <span className="h-px flex-1 bg-line" />

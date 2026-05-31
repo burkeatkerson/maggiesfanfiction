@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PostCard } from "@/components/blog/PostCard";
 import { CategoryFilter } from "@/components/blog/CategoryFilter";
-import { Reveal, Stagger, StaggerItem } from "@/components/ui/motion";
+import { Reveal, RevealText, Stagger, StaggerItem } from "@/components/ui/motion";
 import { getCategoriesWithCounts, listPublishedPosts, getSiteSettings } from "@/lib/data";
 
 export const metadata: Metadata = {
@@ -33,9 +33,14 @@ export default async function BlogIndex({
               ← {site?.site_title ?? "Maggie's Fan Fiction"}
             </Link>
             <p className="kicker mt-8">All Writing</p>
-            <h1 className="mt-3.5 max-w-[640px] font-display text-[clamp(30px,4.4vw,46px)] font-medium leading-[1.12] tracking-[-0.015em] text-ink text-balance">
-              {activeCat ? activeCat.name : "Everything, collected"}
-            </h1>
+          </Reveal>
+          <RevealText
+            as="h1"
+            text={activeCat ? activeCat.name : "Everything, collected"}
+            delay={0.08}
+            className="mt-3.5 max-w-[640px] font-display text-[clamp(30px,4.4vw,46px)] font-medium leading-[1.12] tracking-[-0.015em] text-ink"
+          />
+          <Reveal delay={0.16}>
             <div className="mt-9">
               <CategoryFilter categories={categories} active={category} />
             </div>
