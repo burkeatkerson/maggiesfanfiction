@@ -83,7 +83,7 @@ export function AuthorSeries({
   storyCount: number;
 }) {
   return (
-    <section className="block texture border-t border-line-soft bg-block">
+    <section className="block-pad texture border-t border-line-soft bg-block">
       <Reveal className="block-wide grid grid-cols-1 gap-12 md:grid-cols-[260px_1fr]">
         {series && parts.length ? (
           <SeriesNavSidebar parts={parts} currentSlug={currentSlug} />

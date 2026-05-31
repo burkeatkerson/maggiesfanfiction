@@ -19,7 +19,7 @@ export function Article({
   dropcap?: boolean;
 }) {
   return (
-    <section className="block bg-canvas">
+    <section className="block-pad bg-canvas">
       <article className="block-inner">
         <header>
           <RevealText

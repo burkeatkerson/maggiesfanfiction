@@ -67,7 +67,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         }}
       />
 
-      <div className="block bg-canvas !pb-0">
+      <div className="block-pad bg-canvas !pb-0">
         <div className="block-inner">
           <Link href="/blog" className="meta no-underline hover:text-taupe">
             ← All writing

@@ -26,7 +26,7 @@ export default async function BlogIndex({
 
   return (
     <main>
-      <section className="block texture border-b border-line-soft bg-block">
+      <section className="block-pad texture border-b border-line-soft bg-block">
         <div className="block-wide">
           <Reveal>
             <Link href="/" className="meta no-underline hover:text-taupe">
@@ -48,7 +48,7 @@ export default async function BlogIndex({
         </div>
       </section>
 
-      <section className="block bg-canvas">
+      <section className="block-pad bg-canvas">
         <div className="block-wide">
           <Stagger>
             {posts.map((p, i) => (

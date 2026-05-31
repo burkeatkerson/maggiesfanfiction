@@ -17,7 +17,7 @@ export function LatestFooter({
   authorName: string;
 }) {
   return (
-    <section className="block texture border-t border-line-soft bg-block">
+    <section className="block-pad texture border-t border-line-soft bg-block">
       <div className="block-wide">
         <Reveal className="grid grid-cols-1 gap-16 md:grid-cols-[1.4fr_1fr]">
           {/* latest list */}

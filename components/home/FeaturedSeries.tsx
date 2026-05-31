@@ -47,7 +47,7 @@ function SeriesRow({ s }: { s: Row }) {
 /** Block 2 — featured series (ported from homepage.jsx). */
 export function FeaturedSeries({ series }: { series: Row[] }) {
   return (
-    <section className="block bg-canvas">
+    <section className="block-pad bg-canvas">
       <div className="block-wide">
         <div className="flex flex-wrap items-baseline justify-between gap-6">
           <div>

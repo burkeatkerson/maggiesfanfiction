@@ -115,15 +115,17 @@ body {
   background: rgba(139, 115, 85, 0.18);
 }
 
-.block,
+.block-pad,
 section {
   transition: background-color 0.4s ease, border-color 0.4s ease;
 }
 
 /* ============================================================
    Reusable scaffolding / type helpers (ported from styles.css)
+   NOTE: the section-padding class is `.block-pad`, NOT `.block`, to
+   avoid shadowing Tailwind's `block` (display) utility.
    ============================================================ */
-.block {
+.block-pad {
   padding: var(--block-pad-y) var(--block-pad-x);
 }
 .block-inner {
@@ -217,7 +219,7 @@ section {
 @media (prefers-reduced-motion: reduce) {
   html,
   body,
-  .block,
+  .block-pad,
   section {
     transition: none !important;
   }

@@ -13,7 +13,7 @@ export function SeriesContext({
   currentSlug: string;
 }) {
   return (
-    <section className="block texture border-b border-line-soft bg-block">
+    <section className="block-pad texture border-b border-line-soft bg-block">
       <Reveal className="block-inner">
         <p className="kicker">Part of a Series</p>
         <h2 className="my-4 mb-[22px] font-display text-[clamp(28px,4vw,34px)] font-medium leading-[1.15] tracking-[-0.01em] text-ink">

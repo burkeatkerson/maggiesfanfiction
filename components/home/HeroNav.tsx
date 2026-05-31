@@ -13,7 +13,7 @@ export function HeroNav({
   statement: string;
 }) {
   return (
-    <section className="block texture border-b border-line-soft bg-block">
+    <section className="block-pad texture border-b border-line-soft bg-block">
       <div className="block-wide">
         <Reveal>
           <p className="kicker">{intro}</p>
