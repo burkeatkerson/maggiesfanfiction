@@ -87,7 +87,7 @@ export function PostsManager() {
           {posts.map((post) => (
             <div
               key={post.id}
-              className="group grid grid-cols-[1fr_auto] items-center gap-6 border-t border-line py-[22px] transition-[padding] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:pl-3.5"
+              className="group flex flex-col gap-3.5 border-t border-line py-5 lg:grid lg:grid-cols-[1fr_auto] lg:items-center lg:gap-6 lg:py-[22px] lg:transition-[padding] lg:duration-300 lg:ease-[cubic-bezier(0.22,1,0.36,1)] lg:hover:pl-3.5"
             >
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-3.5">
@@ -110,7 +110,7 @@ export function PostsManager() {
                   <span>{prettyDate(post.published_at ?? post.created_at)}</span>
                 </div>
               </div>
-              <div className="flex gap-2.5 opacity-0 transition-opacity group-hover:opacity-100">
+              <div className="flex gap-2.5 transition-opacity lg:opacity-0 lg:group-hover:opacity-100">
                 <Link href={`/admin/edit/${post.id}`}>
                   <GhostButton small>Edit</GhostButton>
                 </Link>

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { SolidButton } from "@/components/ui/form";
+import { GhostButton, SolidButton } from "@/components/ui/form";
 import { ThemeToggleLink } from "@/components/theme/ThemeToggle";
 import { api } from "./api";
 
@@ -10,20 +10,40 @@ function NavItem({ href, kicker, label, active }: { href: string; kicker: string
   return (
     <Link
       href={href}
-      className="relative flex flex-col gap-[3px] py-4 pl-4 no-underline"
+      className="relative flex flex-col gap-[3px] px-1 py-2 no-underline lg:py-4 lg:pl-4"
     >
-      {active ? <span className="absolute bottom-4 left-0 top-4 w-0.5 bg-taupe" /> : null}
-      <span className={`font-meta text-[10px] uppercase tracking-[0.16em] ${active ? "text-taupe" : "text-ink-faint"}`}>
+      {active ? (
+        // Accent: an underline beneath the tab on small screens, a left bar in the sidebar.
+        <span className="absolute bottom-0 left-1 right-1 h-0.5 bg-taupe lg:bottom-4 lg:left-0 lg:right-auto lg:top-4 lg:h-auto lg:w-0.5" />
+      ) : null}
+      <span className={`hidden font-meta text-[10px] uppercase tracking-[0.16em] lg:block ${active ? "text-taupe" : "text-ink-faint"}`}>
         {kicker}
       </span>
-      <span className={`font-display text-[19px] transition-colors ${active ? "text-ink" : "text-ink-muted hover:text-ink"}`}>
+      <span className={`font-display text-[17px] leading-none transition-colors lg:text-[19px] ${active ? "text-ink" : "text-ink-muted hover:text-ink"}`}>
         {label}
       </span>
     </Link>
   );
 }
 
-/** Admin left rail (ported from admin-shell.jsx). */
+/** View site / theme / sign out — inline on small screens, stacked in the sidebar footer. */
+function UtilityLinks({ onSignOut, stacked }: { onSignOut: () => void; stacked?: boolean }) {
+  const base = "font-meta text-ink-muted no-underline transition-colors hover:text-taupe";
+  const size = stacked ? "py-1.5 text-[12.5px]" : "text-[11.5px]";
+  return (
+    <>
+      <Link href="/" className={`${base} ${size}`}>
+        View site →
+      </Link>
+      <ThemeToggleLink className={`${base} text-left ${size}`} />
+      <button type="button" onClick={onSignOut} className={`${base} text-left ${size}`}>
+        Sign out
+      </button>
+    </>
+  );
+}
+
+/** Admin rail — a compact top bar on phone/tablet-portrait, a left sidebar on desktop. */
 export function AdminRail() {
   const pathname = usePathname();
   const router = useRouter();
@@ -41,35 +61,37 @@ export function AdminRail() {
   }
 
   return (
-    <aside className="texture flex flex-col self-start overflow-y-auto border-b border-line-soft bg-block px-9 py-12 md:sticky md:top-0 md:h-screen md:border-b-0 md:border-r">
-      <div>
-        <p className="kicker text-taupe">Writing Desk</p>
-        <p className="mt-2.5 font-display text-[26px] font-medium tracking-[-0.01em] text-ink">Maggie</p>
+    <aside className="texture flex flex-col border-b border-line-soft bg-block px-5 py-4 lg:sticky lg:top-0 lg:h-screen lg:self-start lg:overflow-y-auto lg:border-b-0 lg:border-r lg:px-9 lg:py-12">
+      {/* Brand — paired with the utility cluster on small screens */}
+      <div className="flex items-start justify-between gap-4 lg:block">
+        <div>
+          <p className="kicker text-taupe">Writing Desk</p>
+          <p className="mt-1 font-display text-[22px] font-medium tracking-[-0.01em] text-ink lg:mt-2.5 lg:text-[26px]">Maggie</p>
+        </div>
+        <div className="flex flex-wrap items-center justify-end gap-x-4 gap-y-1 lg:hidden">
+          <UtilityLinks onSignOut={signOut} />
+        </div>
       </div>
 
-      <div className="mt-8">
+      {/* Primary action — full-width button in the sidebar only */}
+      <div className="hidden lg:mt-8 lg:block">
         <Link href="/admin/create">
           <SolidButton className="w-full">+ Write Something New</SolidButton>
         </Link>
       </div>
 
-      <nav className="mt-9 flex flex-col">
+      {/* Nav — horizontal tabs (with a compact "write" action) on small screens, vertical list on desktop */}
+      <nav className="mt-3 flex items-center gap-5 border-t border-line-soft pt-1 lg:mt-9 lg:flex-col lg:items-stretch lg:gap-0 lg:border-t-0 lg:pt-0">
         <NavItem href="/admin" kicker="Manage" label="Posts" active={onPosts} />
         <NavItem href="/admin/site" kicker="Manage" label="Site Details" active={onSite} />
+        <Link href="/admin/create" className="ml-auto lg:hidden">
+          <GhostButton small>+ Write new</GhostButton>
+        </Link>
       </nav>
 
-      <div className="mt-8 flex flex-col gap-1 pt-8 md:mt-auto">
-        <Link href="/" className="py-1.5 font-meta text-[12.5px] text-ink-muted no-underline transition-colors hover:text-taupe">
-          View site →
-        </Link>
-        <ThemeToggleLink className="py-1.5 text-left font-meta text-[12.5px] text-ink-muted transition-colors hover:text-taupe" />
-        <button
-          type="button"
-          onClick={signOut}
-          className="py-1.5 text-left font-meta text-[12.5px] text-ink-muted transition-colors hover:text-taupe"
-        >
-          Sign out
-        </button>
+      {/* Utility links — sidebar footer (small-screen copy lives next to the brand above) */}
+      <div className="hidden pt-8 lg:mt-auto lg:flex lg:flex-col lg:gap-1">
+        <UtilityLinks onSignOut={signOut} stacked />
       </div>
     </aside>
   );

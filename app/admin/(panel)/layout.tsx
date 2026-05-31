@@ -17,9 +17,9 @@ export default async function PanelLayout({ children }: { children: ReactNode })
   if (!user) redirect("/admin/login");
 
   return (
-    <div className="grid min-h-screen grid-cols-1 md:grid-cols-[280px_1fr]">
+    <div className="grid min-h-screen grid-cols-1 lg:grid-cols-[260px_1fr]">
       <AdminRail />
-      <main className="min-w-0 bg-canvas px-6 py-9 md:p-14">
+      <main className="min-w-0 bg-canvas px-5 py-7 sm:px-7 lg:p-14">
         <div className="mx-auto max-w-[760px]">{children}</div>
       </main>
     </div>
