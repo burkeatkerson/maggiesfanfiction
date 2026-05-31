@@ -11,25 +11,33 @@ import { Toast, useToast } from "@/components/ui/Toast";
 
 interface Draft {
   title: string;
+  headline: string;
   category_id: string;
   series_id: string;
+  series_part: string; // numeric text input
   excerpt: string;
   content: string;
   body_font: string;
   featured_image_url: string | null;
-  tags: string[];
+  featured_image_caption: string;
+  seo_description: string;
+  tags: string; // comma-separated input
   status: PostStatus;
 }
 
 const EMPTY: Draft = {
   title: "",
+  headline: "",
   category_id: "",
   series_id: "",
+  series_part: "",
   excerpt: "",
   content: "",
   body_font: "Crimson Text",
   featured_image_url: null,
-  tags: [],
+  featured_image_caption: "",
+  seo_description: "",
+  tags: "",
   status: "draft",
 };
 
@@ -77,13 +85,17 @@ export function PostComposer({ postId }: { postId?: string }) {
           const post: Post = await api.posts.get(postId);
           setDraft({
             title: post.title,
+            headline: post.headline ?? "",
             category_id: post.category_id ?? cats[0]?.id ?? "",
             series_id: post.series_id ?? "",
+            series_part: post.series_part != null ? String(post.series_part) : "",
             excerpt: post.excerpt ?? "",
             content: post.content ?? "",
             body_font: post.body_font,
             featured_image_url: post.featured_image_url,
-            tags: post.tags ?? [],
+            featured_image_caption: post.featured_image_caption ?? "",
+            seo_description: post.seo_description ?? "",
+            tags: (post.tags ?? []).join(", "),
             status: post.status,
           });
         } else {
@@ -112,14 +124,20 @@ export function PostComposer({ postId }: { postId?: string }) {
       return;
     }
     setSaving(true);
+    const partNum = Number.parseInt(draft.series_part, 10);
     const body = {
       title: draft.title,
+      headline: draft.headline.trim() || null,
       category_id: draft.category_id || null,
       series_id: draft.series_id || null,
+      series_part: draft.series_id && Number.isFinite(partNum) ? partNum : null,
       excerpt: draft.excerpt || null,
       content: draft.content || null,
       body_font: draft.body_font,
       featured_image_url: draft.featured_image_url,
+      featured_image_caption: draft.featured_image_caption.trim() || null,
+      seo_description: draft.seo_description.trim() || null,
+      tags: draft.tags.split(",").map((t) => t.trim()).filter(Boolean),
       status,
     };
     try {
@@ -148,6 +166,10 @@ export function PostComposer({ postId }: { postId?: string }) {
         <TextInput value={draft.title} placeholder="Give it a title…" onChange={(v) => set("title", v)} />
       </FieldGroup>
 
+      <FieldGroup label="Display headline" note="Optional. The large title shown on the story page — defaults to the title above.">
+        <TextInput value={draft.headline} placeholder="Leave blank to use the title" onChange={(v) => set("headline", v)} />
+      </FieldGroup>
+
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
         <FieldGroup label="Category">
           <Select value={draft.category_id} options={catOptions} onChange={(v) => set("category_id", v)} />
@@ -156,6 +178,17 @@ export function PostComposer({ postId }: { postId?: string }) {
           <Select value={draft.series_id} options={serOptions} onChange={(v) => set("series_id", v)} />
         </FieldGroup>
       </div>
+
+      {draft.series_id ? (
+        <FieldGroup label="Part number" note="Orders this piece within the series navigation.">
+          <TextInput
+            value={draft.series_part}
+            placeholder="e.g. 3"
+            mono
+            onChange={(v) => set("series_part", v.replace(/[^0-9]/g, ""))}
+          />
+        </FieldGroup>
+      ) : null}
 
       <FieldGroup label="Featured image" note="Drag & drop or click — uploaded to Supabase Storage.">
         <ImageUploader
@@ -166,8 +199,20 @@ export function PostComposer({ postId }: { postId?: string }) {
         />
       </FieldGroup>
 
+      <FieldGroup label="Featured image caption" note="Shown beneath the image on the story page.">
+        <TextInput value={draft.featured_image_caption} placeholder="e.g. The meeting point, after midnight" onChange={(v) => set("featured_image_caption", v)} />
+      </FieldGroup>
+
       <FieldGroup label="Excerpt" note="A one-line teaser shown in lists.">
         <TextArea value={draft.excerpt} rows={2} onChange={(v) => set("excerpt", v)} />
+      </FieldGroup>
+
+      <FieldGroup label="Tags" note="Comma-separated genre tags shown on the story page (e.g. Slow Burn, Romance).">
+        <TextInput value={draft.tags} placeholder="Slow Burn, Romance, Series" mono onChange={(v) => set("tags", v)} />
+      </FieldGroup>
+
+      <FieldGroup label="SEO description" note="Meta description for search engines & link previews. Defaults to the excerpt if blank.">
+        <TextArea value={draft.seo_description} rows={2} serif={false} onChange={(v) => set("seo_description", v)} />
       </FieldGroup>
 
       <div className="mb-10">

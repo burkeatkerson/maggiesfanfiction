@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { ThemeToggleLink } from "@/components/theme/ThemeToggle";
 import { api } from "@/components/admin/api";
 
-const QUOTE = "Some stories are only told in the margins. This is where I keep mine.";
+const FALLBACK_QUOTE = "Some stories are only told in the margins. This is where I keep mine.";
 
 function Field({
   label,
@@ -55,7 +55,7 @@ function Field({
 }
 
 /** Login page — real Supabase Auth via POST /api/auth/login. */
-export function LoginForm() {
+export function LoginForm({ quote }: { quote?: string }) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -87,7 +87,7 @@ export function LoginForm() {
         <div>
           <p className="kicker text-taupe">Writing Desk</p>
           <p className="mt-[22px] max-w-[420px] font-display text-[clamp(26px,3vw,36px)] font-normal italic leading-[1.32] text-ink text-balance">
-            &ldquo;{QUOTE}&rdquo;
+            &ldquo;{quote || FALLBACK_QUOTE}&rdquo;
           </p>
         </div>
         <p className="meta text-[12.5px] text-ink-muted">

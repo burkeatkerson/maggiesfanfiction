@@ -8,7 +8,10 @@ import { Toast, useToast } from "@/components/ui/Toast";
 import { HEADLINE_FONTS, headlineCss } from "@/lib/fonts";
 import type { Category, Series, SiteSettings } from "@/lib/types";
 
-type SiteFields = Pick<SiteSettings, "intro" | "statement" | "quote" | "bio" | "photo_url" | "headline_font">;
+type SiteFields = Pick<
+  SiteSettings,
+  "intro" | "statement" | "quote" | "bio" | "photo_url" | "headline_font" | "site_title" | "default_seo_description"
+>;
 
 function SectionHeading({ children }: { children: React.ReactNode }) {
   return (
@@ -43,6 +46,8 @@ export function SiteDetails() {
         bio: s?.bio ?? "",
         photo_url: s?.photo_url ?? null,
         headline_font: s?.headline_font ?? "EB Garamond",
+        site_title: s?.site_title ?? "",
+        default_seo_description: s?.default_seo_description ?? "",
       });
       await reloadTaxonomy();
     })().catch((e) => flash(e instanceof Error ? e.message : "Load failed"));
@@ -69,6 +74,8 @@ export function SiteDetails() {
         bio: site.bio ?? "",
         photo_url: site.photo_url ?? null,
         headline_font: site.headline_font ?? "EB Garamond",
+        site_title: site.site_title ?? "",
+        default_seo_description: site.default_seo_description ?? "",
       });
 
   const setField = (key: keyof SiteFields, val: string | null) =>
@@ -142,6 +149,10 @@ export function SiteDetails() {
     <div className="pb-32">
       <SectionHeading>Identity</SectionHeading>
 
+      <FieldGroup label="Site title" note="Used in the browser tab, headers, and search/social titles.">
+        <TextInput value={draft.site_title ?? ""} onChange={(v) => setField("site_title", v)} />
+      </FieldGroup>
+
       <FieldGroup label="Author photo" note="Shown on the About panel. Uploaded to Supabase Storage.">
         <ImageUploader
           value={draft.photo_url}
@@ -162,6 +173,9 @@ export function SiteDetails() {
       </FieldGroup>
       <FieldGroup label="Author bio" note="Your About-the-author paragraph.">
         <TextArea value={draft.bio ?? ""} rows={5} onChange={(v) => setField("bio", v)} />
+      </FieldGroup>
+      <FieldGroup label="Default SEO description" note="The site's default meta description for search engines & link previews.">
+        <TextArea value={draft.default_seo_description ?? ""} rows={2} serif={false} onChange={(v) => setField("default_seo_description", v)} />
       </FieldGroup>
 
       <div className="mt-14">
@@ -224,7 +238,7 @@ export function SiteDetails() {
                   value={s.fandom ?? ""}
                   placeholder="e.g. Harry Potter"
                   onChange={(e) => setSeries((arr) => arr.map((x) => (x.id === s.id ? { ...x, fandom: e.target.value } : x)))}
-                  onBlur={() => updateSeries(s.id, { fandom: s.fandom, title: s.title })}
+                  onBlur={() => updateSeries(s.id, { fandom: s.fandom, title: s.title, note: s.note, status: s.status })}
                   className="w-full border-0 border-b border-line bg-transparent py-2 font-meta text-[15px] text-ink outline-none focus:border-ink"
                 />
               </div>
@@ -234,11 +248,41 @@ export function SiteDetails() {
                   value={s.title}
                   placeholder="Series title"
                   onChange={(e) => setSeries((arr) => arr.map((x) => (x.id === s.id ? { ...x, title: e.target.value } : x)))}
-                  onBlur={() => updateSeries(s.id, { fandom: s.fandom, title: s.title })}
+                  onBlur={() => updateSeries(s.id, { fandom: s.fandom, title: s.title, note: s.note, status: s.status })}
                   className="w-full border-0 border-b border-line bg-transparent py-2 font-body text-[19px] text-ink outline-none focus:border-ink"
                 />
               </div>
             </div>
+
+            <div className="mt-5 grid grid-cols-1 gap-6 md:grid-cols-[1fr_180px]">
+              <div>
+                <Label>Description</Label>
+                <input
+                  value={s.note ?? ""}
+                  placeholder="A one-line blurb shown on the homepage"
+                  onChange={(e) => setSeries((arr) => arr.map((x) => (x.id === s.id ? { ...x, note: e.target.value } : x)))}
+                  onBlur={() => updateSeries(s.id, { fandom: s.fandom, title: s.title, note: s.note, status: s.status })}
+                  className="w-full border-0 border-b border-line bg-transparent py-2 font-meta text-[15px] text-ink outline-none focus:border-ink"
+                />
+              </div>
+              <div>
+                <Label>Status</Label>
+                <select
+                  value={s.status ?? ""}
+                  onChange={(e) => {
+                    const status = (e.target.value || null) as Series["status"];
+                    setSeries((arr) => arr.map((x) => (x.id === s.id ? { ...x, status } : x)));
+                    updateSeries(s.id, { fandom: s.fandom, title: s.title, note: s.note, status });
+                  }}
+                  className="w-full cursor-pointer appearance-none border-0 border-b border-line bg-transparent py-2 font-meta text-[15px] text-ink outline-none focus:border-ink"
+                >
+                  <option value="" className="text-[#1a1a1a]">— None</option>
+                  <option value="Ongoing" className="text-[#1a1a1a]">Ongoing</option>
+                  <option value="Complete" className="text-[#1a1a1a]">Complete</option>
+                </select>
+              </div>
+            </div>
+
             <div className="mt-4 flex flex-wrap items-center gap-7">
               <span className="inline-flex items-baseline gap-2">
                 <span className="font-display text-[22px] font-medium text-ink">{s.parts}</span>
